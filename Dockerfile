@@ -1,6 +1,10 @@
-FROM ubuntu:20.10
+FROM ubuntu:20.10 AS base
 
-ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install --yes --no-install-recommends \
+    ca-certificates squashfs-tools \
+ && rm -rf /var/lib/apt/lists/*
+
+FROM base AS builder
 
 RUN apt-get update && apt-get install --yes --no-install-recommends \
     build-essential \
@@ -12,7 +16,8 @@ RUN apt-get update && apt-get install --yes --no-install-recommends \
     wget ca-certificates \
     pkg-config \
     git \
-    cryptsetup
+    cryptsetup \
+  && rm -rf /var/lib/apt/lists/*
 
 RUN export VERSION=1.16.4 \
  && wget --quiet https://golang.org/dl/go${VERSION}.linux-amd64.tar.gz \
@@ -30,6 +35,12 @@ RUN export VERSION=3.7.3 \
  && make -C builddir \
  && make -C builddir install \
  && rm -r /singularity
+
+FROM base
+
+# A few more would be needed to make run/exec work?
+COPY --from=builder /usr/local/bin/singularity /usr/local/bin/singularity
+COPY --from=builder /usr/local/etc/singularity/singularity.conf /usr/local/etc/singularity/singularity.conf
 
 RUN mkdir /output
 WORKDIR /output
