@@ -1,0 +1,30 @@
+name: build and push to DockerHub
+
+on:
+  push:
+    branches: [ main ]
+  pull_request: 
+
+jobs:
+  build_and_push_to_registry:
+    name: build and push to Dockerhub
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v2
+      - name: get shortened SHA
+        id: short_sha
+        run: echo ::set-output name=sha::$(echo ${GITHUB_SHA::12})
+      - name: login to DockerHub
+        uses: docker/login-action@v1 
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: build and push to DockerHub
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: |
+            kathoef/docker2singularity:main-${{ steps.short_sha.outputs.sha }}
+            kathoef/docker2singularity:latest
+
