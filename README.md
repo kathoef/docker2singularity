@@ -7,7 +7,7 @@ alternative implementation that does not rely on Docker in Docker
 
 ## Use case
 
-Building a Singularity image from a local Docker image registry,
+Build a Singularity image from a Docker image only available via local registry,
 
 ```
 $ docker pull kathoef/docker2singularity:latest
