@@ -11,5 +11,16 @@ Building a Singularity image from a local Docker image registry,
 
 ```
 $ docker pull kathoef/docker2singularity:latest
-$ docker run -v /var/run/docker.sock:/var/run/docker.sock -v $PWD:/output --rm kathoef/docker2singularity singularity build ubuntu.sif docker-daemon://ubuntu:20.04
+$ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $PWD:/output \
+kathoef/docker2singularity singularity build alpine.sif docker-daemon://alpine:latest
+```
+
+On a Linux system you might want to change the container's ownership,
+
+```
+$ ls -l alpine.sif
+-rwxr-xr-x 1 root root 2777088 Mai 15 17:11 alpine.sif
+$ sudo chown $(id -u):$(id -g) alpine.sif
+$ ls -l alpine.sif
+-rwxr-xr-x 1 kathoef kathoef 2777088 Mai 15 17:11 alpine.sif
 ```
