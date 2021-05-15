@@ -1,6 +1,7 @@
 FROM ubuntu:20.10 AS base
 
 RUN apt-get update && apt-get install --yes --no-install-recommends \
+    # supported workflows: singularity build/pull
     ca-certificates squashfs-tools \
  && rm -rf /var/lib/apt/lists/*
 
@@ -27,20 +28,24 @@ RUN export VERSION=1.16.4 \
 ENV PATH=$PATH:/usr/local/go/bin
 
 RUN export VERSION=3.7.3 \
+ && cd /tmp \
  && wget --quiet https://github.com/hpcng/singularity/releases/download/v${VERSION}/singularity-${VERSION}.tar.gz \
  && tar -xzf singularity-${VERSION}.tar.gz \
- && rm /singularity-${VERSION}.tar.gz \
  && cd singularity \
- && ./mconfig \
+ && ./mconfig --prefix=/singularity \
  && make -C builddir \
- && make -C builddir install \
- && rm -r /singularity
+ && make -C builddir install
 
 FROM base
 
-# A few more would be needed to make run/exec work?
-COPY --from=builder /usr/local/bin/singularity /usr/local/bin/singularity
-COPY --from=builder /usr/local/etc/singularity/singularity.conf /usr/local/etc/singularity/singularity.conf
+ENV PATH=$PATH:/singularity/bin
+
+# Adding full install...
+#COPY --from=builder /singularity /singularity
+
+# Adding minimalistic install...
+COPY --from=builder /singularity/bin/singularity /singularity/bin/singularity
+COPY --from=builder /singularity/etc/singularity/singularity.conf /singularity/etc/singularity/singularity.conf
 
 RUN mkdir /output
 WORKDIR /output
