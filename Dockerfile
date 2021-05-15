@@ -43,9 +43,16 @@ ENV PATH=$PATH:/singularity/bin
 # Adding full install...
 #COPY --from=builder /singularity /singularity
 
-# Adding minimalistic install...
+# Adding minimal install...
 COPY --from=builder /singularity/bin/singularity /singularity/bin/singularity
 COPY --from=builder /singularity/etc/singularity/singularity.conf /singularity/etc/singularity/singularity.conf
+
+# Add original Singularity license information.
+COPY --from=builder /tmp/singularity/LICENSE.md /singularity/LICENSE.md
+COPY --from=builder /tmp/singularity/README.md /singularity/README.md
+
+# Add this repo's information.
+ADD README.md LICENSE /
 
 RUN mkdir /output
 WORKDIR /output
