@@ -30,5 +30,6 @@ $ ls -l alpine.sif
 
 ## References
 
+* https://github.com/hpcng/singularity
 * https://sylabs.io/guides/3.7/admin-guide/installation.html#installation-on-linux
 * https://github.com/singularityhub/docker2singularity
