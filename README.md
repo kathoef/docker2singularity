@@ -1,4 +1,8 @@
 # docker2singularity
+
+![](https://github.com/kathoef/dgoielksdfg/actions/workflows/test-docker-image.yml/badge.svg?branch=main&event=push&event=workflow_dispatch)
+![](https://shields.io/docker/image-size/kathoef/docker2singularity/latest)
+
 alternative implementation that does not rely on Docker in Docker
 
 ## Use case
