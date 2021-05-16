@@ -1,11 +1,13 @@
 FROM ubuntu:20.10 AS base
 
 RUN apt-get update && apt-get install --yes --no-install-recommends \
-    # supported workflows: singularity build/pull
+    # support singularity build/pull workflows
     ca-certificates squashfs-tools \
  && rm -rf /var/lib/apt/lists/*
 
 FROM base AS builder
+
+# https://sylabs.io/guides/3.7/admin-guide/installation.html#installation-on-linux
 
 RUN apt-get update && apt-get install --yes --no-install-recommends \
     build-essential \
@@ -38,22 +40,27 @@ RUN export VERSION=3.7.3 \
 
 FROM base
 
-ENV PATH=$PATH:/singularity/bin
+# Original Singularity information.
 
-# Adding full install...
-#COPY --from=builder /singularity /singularity
-
-# Adding minimal install...
-COPY --from=builder /singularity/bin/singularity /singularity/bin/singularity
-COPY --from=builder /singularity/etc/singularity/singularity.conf /singularity/etc/singularity/singularity.conf
-
-# Add original Singularity license information.
 COPY --from=builder /tmp/singularity/LICENSE.md /singularity/LICENSE.md
 COPY --from=builder /tmp/singularity/README.md /singularity/README.md
 
-# Add this repo's information.
-ADD README.md LICENSE /
+# This repository's information.
 
+ADD README.md LICENSE Dockerfile /
+
+# Singularity executable.
+
+# Full install...
+#COPY --from=builder /singularity /singularity
+
+# Minimal install... supports singularity pull/build workflows.
+COPY --from=builder /singularity/bin/singularity /singularity/bin/singularity
+COPY --from=builder /singularity/etc/singularity/singularity.conf /singularity/etc/singularity/singularity.conf
+
+# Conveniences.
+
+ENV PATH=$PATH:/singularity/bin
 RUN mkdir /output
 WORKDIR /output
 
