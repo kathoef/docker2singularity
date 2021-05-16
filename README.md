@@ -5,7 +5,7 @@
 
 This is an alternative implementation to [docker2singularity](https://github.com/singularityhub/docker2singularity).
 It makes use of Singularity build functionality only and does not rely on Docker in Docker and/or granting host device root capabilities via the `--privileged` flag.
-(Which should be done only if absolutely necessary and seems not to be required for simple Singularity build or pull tasks.)
+(Which should be done only if absolutely necessary and is not required for simple Singularity build or pull tasks.)
 
 This Docker image was originally developed for [container image portability tests](https://github.com/ExaESM-WP4/Batch-scheduler-Singularity-bindings/blob/e4be0220f8938b9cc3275267bc44be44e925b3ea/test_image_compatibility/), and therein to have a fully controllable Singularity pull environment available.
 It turned out that local `singularity build ... docker-daemon://` tasks also worked, which only required `/var/run/docker.sock` to be mounted.
