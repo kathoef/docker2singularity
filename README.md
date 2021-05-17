@@ -4,7 +4,7 @@
 [![](https://shields.io/docker/image-size/kathoef/docker2singularity/latest)](https://hub.docker.com/r/kathoef/docker2singularity)
 
 This is an alternative implementation of [docker2singularity](https://github.com/singularityhub/docker2singularity) that does not rely on Docker in Docker and having to grant the container host device root capabilities via the `--privileged` flag.
-(Which should in general be done only if absolutely necessary, could be considered bad practice, and turned out not to be necessary for the local container build workflows that are described below.)
+(Which should in general be done only if absolutely necessary, could be considered bad practice, and turned out not to be necessary for the local container build workflow that is described below.)
 
 The Docker image provided here was originally specified for [container image portability tests](https://github.com/ExaESM-WP4/Batch-scheduler-Singularity-bindings/blob/e4be0220f8938b9cc3275267bc44be44e925b3ea/test_image_compatibility/) and to have a fully controllable Singularity pull environment available.
 It turned out that my local Docker image Singularity build tasks also worked quite well and only required the Docker socket to be mounted.
