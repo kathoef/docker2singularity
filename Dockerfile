@@ -63,4 +63,3 @@ COPY --from=builder /singularity/etc/singularity/singularity.conf /singularity/e
 ENV PATH=$PATH:/singularity/bin
 RUN mkdir /output
 WORKDIR /output
-
