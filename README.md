@@ -10,7 +10,7 @@ The Docker image provided here was originally specified for [container image por
 It turned out that my local Docker image Singularity build tasks also worked quite well and only required the Docker socket to be mounted.
 (No tinkering with default Docker run privileges necessary.)
 
-As I use these Docker-based fully local Singularity container image build pipelines quite often (mainly because CI and/or hub-based workflows add complexity to a single-user project that feels unnecessary and also because I have seen `singularity pull` attempts on the big machines failing) I thought I'd provide a bit more of a structured ground here.
+As I use these Docker-based fully local Singularity container image build pipelines quite often (mainly because CI and/or hub-based workflows add complexity to a single-user project that feels unnecessary and also because I have seen `singularity pull` attempts on the big machines failing) I thought I'd provide a bit more of a structured ground to this workflow here.
 
 Maybe it's useful to others as well, feedback is welcome.
 
