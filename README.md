@@ -30,7 +30,7 @@ $ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v ${PWD}:/output
 kathoef/docker2singularity singularity build test.sif docker-daemon://localhost/test:latest
 ```
 
-This was tested on Linux, MacOS and Windows 10 (w/ Hyper-V backend) and [Docker Desktop](https://www.docker.com/products/docker-desktop) v20.10.6 installed.
+This was tested on Linux, MacOS Mojave and Windows 10 (w/ Hyper-V backend) and [Docker Desktop](https://www.docker.com/products/docker-desktop) with Docker Engine v20.10.6 installed.
 
 ### For Linux
 
