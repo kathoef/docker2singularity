@@ -1,7 +1,7 @@
 # docker2singularity
 
 ![](https://github.com/kathoef/docker2singularity/actions/workflows/test-docker-image.yml/badge.svg?branch=main)
-![](https://shields.io/docker/image-size/kathoef/docker2singularity/latest)
+[![](https://shields.io/docker/image-size/kathoef/docker2singularity/latest)](https://hub.docker.com/r/kathoef/docker2singularity)
 
 This is an alternative implementation of [docker2singularity](https://github.com/singularityhub/docker2singularity) that does not rely on Docker in Docker and having to grant the container host device root capabilities via the `--privileged` flag.
 (Which should in general be done only if absolutely necessary, could be considered bad practice, and turned out not to be necessary for the local container build workflows described below.)
