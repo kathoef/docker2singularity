@@ -47,5 +47,6 @@ $ ls -l test.sif
 ## References
 
 * https://github.com/singularityhub/docker2singularity
+* https://sylabs.io/guides/3.7/user-guide/singularity_and_docker.html#locally-available-images-cached-by-docker
 * https://sylabs.io/guides/3.7/admin-guide/installation.html#installation-on-linux
 * https://github.com/hpcng/singularity
