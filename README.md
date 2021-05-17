@@ -1,24 +1,30 @@
 # docker2singularity
 
-![](https://github.com/kathoef/docker2singularity/actions/workflows/test-docker-image.yml/badge.svg?branch=main&event=push&event=workflow_dispatch)
+![](https://github.com/kathoef/docker2singularity/actions/workflows/test-docker-image.yml/badge.svg?branch=main)
 ![](https://shields.io/docker/image-size/kathoef/docker2singularity/latest)
 
-This is an alternative implementation of [docker2singularity](https://github.com/singularityhub/docker2singularity) that does not rely on Docker in Docker and granting the running container host device root capabilities via the `--privileged` flag.
-(Which should be done only if absolutely necessary, could be considered bad practice, and turned out not to be necessary for the container build workflows described below.)
+This is an alternative implementation of [docker2singularity](https://github.com/singularityhub/docker2singularity) that does not rely on Docker in Docker and having to grant the container host device root capabilities via the `--privileged` flag.
+(Which should in general be done only if absolutely necessary, could be considered bad practice, and turned out not to be necessary for the local container build workflows described below.)
 
-This Docker image was originally developed for a few [container image portability tests](https://github.com/ExaESM-WP4/Batch-scheduler-Singularity-bindings/blob/e4be0220f8938b9cc3275267bc44be44e925b3ea/test_image_compatibility/), and therein to have a fully controllable Singularity pull environment available.
-It turned out that my local Docker image Singularity build tasks also worked, which only required `/var/run/docker.sock` to be mounted.
+The Docker image provided here was originally specified for [container image portability tests](https://github.com/ExaESM-WP4/Batch-scheduler-Singularity-bindings/blob/e4be0220f8938b9cc3275267bc44be44e925b3ea/test_image_compatibility/) and to have a fully controllable Singularity pull environment available.
+It turned out that my local Docker image Singularity build tasks also worked quite well and only required the Docker socket to be mounted.
 (No tinkering with default Docker run privileges necessary.)
 
-As I use these fully local build pipelines quite often (mainly because CI and/or hub workflows add unnecessary complexity to a single-user project and also because I have seen `singularity pull` attempts on big machines failing) I thought I'd provide a bit more of a structured ground here.
-Feedback is welcome.
+As I use these Docker-based fully local Singularity container image build pipelines quite often (mainly because CI and/or hub-based workflows add complexity to a single-user scientific computing project that feels unnecessary and also because I have seen `singularity pull` attempts on the big machines failing) I thought I'd provide a bit more of a structured ground here.
+
+Maybe it's useful to others as well, feedback is welcome.
 
 ## Use case
 
-Build a Singularity image from a Docker image that was build locally on your system,
+Build a Singularity image from a Docker image that was built locally on your system,
 
 ```
+$ ls -l Dockerfile
+-rw-rw-r-- 1 kathoef kathoef 58 Mai 15 17:14 Dockerfile
 $ docker build -t localhost/test .
+```
+
+```
 $ docker pull kathoef/docker2singularity:latest
 $ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $PWD:/output \
 kathoef/docker2singularity singularity build test.sif docker-daemon://localhost/test:latest
@@ -33,10 +39,10 @@ You might want to change the Singularity image's file ownership afterwards,
 
 ```
 $ ls -l test.sif
--rwxr-xr-x 1 root root 2777088 Mai 15 17:11 test.sif
+-rwxr-xr-x 1 root root 2777088 Mai 15 17:19 test.sif
 $ sudo chown $(id -u):$(id -g) test.sif
 $ ls -l test.sif
--rwxr-xr-x 1 kathoef kathoef 2777088 Mai 15 17:11 test.sif
+-rwxr-xr-x 1 kathoef kathoef 2777088 Mai 15 17:19 test.sif
 ```
 
 ## References
