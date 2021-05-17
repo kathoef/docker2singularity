@@ -26,12 +26,11 @@ $ docker build -t localhost/test .
 
 ```
 $ docker pull kathoef/docker2singularity:latest
-$ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $PWD:/output \
+$ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v ${PWD}:/output \
 kathoef/docker2singularity singularity build test.sif docker-daemon://localhost/test:latest
 ```
 
-This works on Linux and MacOS with [Docker Desktop](https://www.docker.com/products/docker-desktop) installed.
-(Windows currently untested.)
+This was tested on Linux, MacOS and Windows 10 (w/ Hyper-V backend) and [Docker Desktop](https://www.docker.com/products/docker-desktop) v20.10.6 installed.
 
 ### For Linux
 
