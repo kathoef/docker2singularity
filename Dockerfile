@@ -1,4 +1,4 @@
-FROM ubuntu:20.10 AS base
+FROM ubuntu:bionic-20220315 AS base
 
 RUN apt-get update && apt-get install --yes --no-install-recommends \
     # support singularity build/pull workflows
@@ -22,10 +22,12 @@ RUN apt-get update && apt-get install --yes --no-install-recommends \
     cryptsetup \
   && rm -rf /var/lib/apt/lists/*
 
+ARG TARGETARCH
+
 RUN export VERSION=1.16.4 \
- && wget --quiet https://golang.org/dl/go${VERSION}.linux-amd64.tar.gz \
- && tar -C /usr/local -xzf go${VERSION}.linux-amd64.tar.gz \
- && rm /go${VERSION}.linux-amd64.tar.gz
+ && wget --quiet https://golang.org/dl/go${VERSION}.linux-${TARGETARCH}.tar.gz \
+ && tar -C /usr/local -xzf go${VERSION}.linux-${TARGETARCH}.tar.gz \
+ && rm /go${VERSION}.linux-${TARGETARCH}.tar.gz
 
 ENV PATH=$PATH:/usr/local/go/bin
 
