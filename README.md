@@ -1,6 +1,6 @@
 # docker2singularity
 
-[![](https://github.com/kathoef/docker2singularity/actions/workflows/test-docker-image.yml/badge.svg?branch=main)](https://github.com/kathoef/docker2singularity/blob/main/.github/workflows/test-docker-image.yml)
+[![](https://github.com/kathoef/docker2singularity/actions/workflows/test-dockerhub-image.yml/badge.svg?branch=main)](https://github.com/kathoef/docker2singularity/blob/main/.github/workflows/test-dockerhub-image.yml)
 [![](https://shields.io/docker/image-size/kathoef/docker2singularity/latest)](https://hub.docker.com/r/kathoef/docker2singularity)
 
 This is an alternative implementation of [docker2singularity](https://github.com/singularityhub/docker2singularity) that does not rely on Docker in Docker and having to grant the container host device root capabilities via the `--privileged` flag.
