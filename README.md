@@ -49,10 +49,10 @@ $ ls -l test.sif
 ## Background information
 
 The Docker image provided here was originally specified for [container image portability tests](https://github.com/ExaESM-WP4/Batch-scheduler-Singularity-bindings/blob/e4be0220f8938b9cc3275267bc44be44e925b3ea/test_image_compatibility/) in order to have a fully controllable Singularity pull environment available.
+
 It turned out that my local Docker image Singularity build tasks also worked quite well and only required the Docker socket to be mounted as read-only.
 
-Since I use these Docker-based local Singularity container image build workflows quite often [^1] I thought I'd provide a bit more of a structured ground to this approach here.
-
+Since I use these Docker-based local Singularity container image build workflows quite often [^1] I thought I'd provide a bit of a structured ground to this approach.
 Maybe it happens to be useful to others, feedback is welcome!
 
 [^1]: mainly since CI and/or manual DockerHub-based workflows add complexity to a single-user data analysis project that seems unnecessary and also because I have seen `singularity pull` attempts on e.g. HPC machines failing
