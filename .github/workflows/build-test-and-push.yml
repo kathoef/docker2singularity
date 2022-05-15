@@ -14,7 +14,7 @@ on:
 
 env:
   GITHUB_SHA: ${{ github.sha }}
-  DOCKERHUB_TARGET_REPO: kathoef/dfjghsdfg
+  DOCKERHUB_TARGET_REPO: kathoef/docker2singularity
 
 jobs:
   build_test_push:
