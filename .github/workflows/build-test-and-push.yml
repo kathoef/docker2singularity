@@ -58,8 +58,8 @@ jobs:
        if: ${{ startsWith(github.ref, 'refs/heads/main')}}
        uses: docker/login-action@v1
        with:
-        username: ${{ secrets.DOCKERHUB_LOGIN_USER }}
-        password: ${{ secrets.DOCKERHUB_LOGIN_TOKEN }}
+        username: ${{ secrets.DOCKERHUB_USER }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
      - name: Build and push the multi-arch Docker images
        if: ${{ startsWith(github.ref, 'refs/heads/main')}}
        uses: docker/build-push-action@v3
