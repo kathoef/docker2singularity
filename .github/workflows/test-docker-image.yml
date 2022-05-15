@@ -1,4 +1,4 @@
-name: Docker image tests
+name: test default architecture Docker image
 
 on:
   push:
@@ -13,15 +13,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Pull latest Docker image
+    - name: Pull default architecture Docker image
       run: docker pull ${{env.TESTING_IMAGE}}
     - name: Test singularity pull
       run: |
        docker run -v $PWD:/output --rm ${{env.TESTING_IMAGE}} singularity pull alpine_latest.sif docker://alpine:latest
-       ls; test -f alpine_latest.sif
-    - name: Test singularity build from localhost
+       test -f alpine_latest.sif && rm alpine_latest.sif
+    - name: Test singularity build
       run: |
-       echo 'FROM alpine:latest' > Dockerfile_for_local_build_workflow
-       docker build -f Dockerfile_for_local_build_workflow -t localhost/from_local_build_workflow .
-       docker run -v $PWD:/output -v /var/run/docker.sock:/var/run/docker.sock --rm ${{env.TESTING_IMAGE}} singularity build localhost.sif docker-daemon://localhost/from_local_build_workflow:latest
-       ls; test -f localhost.sif
+       echo 'FROM alpine:latest' > Dockerfile
+       docker build -f Dockerfile -t local/from_local_build_workflow .
+       docker run -v $PWD:/output -v /var/run/docker.sock:/var/run/docker.sock:ro --rm ${{env.TESTING_IMAGE}} singularity build local.sif docker-daemon://local/from_local_build_workflow:latest
+       test -f local.sif && rm local.sif
