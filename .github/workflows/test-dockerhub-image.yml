@@ -1,0 +1,27 @@
+name: test default architecture Docker image
+
+on:
+  push:
+    branches: main
+    paths-ignore: Dockerfile
+  workflow_dispatch:
+
+env:
+  TESTING_IMAGE: kathoef/docker2singularity:latest
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Pull default architecture Docker image
+      run: docker pull ${{env.TESTING_IMAGE}}
+    - name: Test singularity pull
+      run: |
+       docker run -v $PWD:/output --rm ${{env.TESTING_IMAGE}} singularity pull alpine_latest.sif docker://alpine:latest
+       test -f alpine_latest.sif && rm alpine_latest.sif
+    - name: Test singularity build
+      run: |
+       echo 'FROM alpine:latest' > Dockerfile
+       docker build -f Dockerfile -t local/from_local_build_workflow .
+       docker run -v $PWD:/output -v /var/run/docker.sock:/var/run/docker.sock:ro --rm ${{env.TESTING_IMAGE}} singularity build local.sif docker-daemon://local/from_local_build_workflow:latest
+       test -f local.sif && rm local.sif

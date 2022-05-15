@@ -1,65 +1,70 @@
-FROM ubuntu:20.10 AS base
+FROM ubuntu:22.04 AS base
 
-RUN apt-get update && apt-get install --yes --no-install-recommends \
-    # support singularity build/pull workflows
+RUN apt update && apt install --yes --no-install-recommends \
+    # add singularity build and singularity pull OS dependencies
     ca-certificates squashfs-tools \
- && rm -rf /var/lib/apt/lists/*
+ && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 FROM base AS builder
 
-# https://sylabs.io/guides/3.7/admin-guide/installation.html#installation-on-linux
+# https://apptainer.org/docs/admin/main/installation.html#install-from-source
 
-RUN apt-get update && apt-get install --yes --no-install-recommends \
+RUN apt update && apt install --yes --no-install-recommends \
     build-essential \
-    libssl-dev \
     uuid-dev \
-    libgpgme11-dev \
+    libgpgme-dev \
     squashfs-tools \
     libseccomp-dev \
-    wget ca-certificates \
+    wget \
     pkg-config \
     git \
-    cryptsetup \
-  && rm -rf /var/lib/apt/lists/*
+    cryptsetup-bin
 
-RUN export VERSION=1.16.4 \
- && wget --quiet https://golang.org/dl/go${VERSION}.linux-amd64.tar.gz \
- && tar -C /usr/local -xzf go${VERSION}.linux-amd64.tar.gz \
- && rm /go${VERSION}.linux-amd64.tar.gz
+ARG TARGETPLATFORM
+ARG BUILDPLATFORM
+
+SHELL ["/bin/bash", "-c"]
+
+RUN export VERSION=1.18.2 \
+ && export ARCH=linux-${TARGETPLATFORM#'linux/'} \
+ && wget --quiet https://go.dev/dl/go${VERSION}.${ARCH}.tar.gz \
+ && tar -C /usr/local -xzf go${VERSION}.${ARCH}.tar.gz
 
 ENV PATH=$PATH:/usr/local/go/bin
 
-RUN export VERSION=3.7.3 \
+RUN export VERSION=1.0.2 \
  && cd /tmp \
- && wget --quiet https://github.com/hpcng/singularity/releases/download/v${VERSION}/singularity-${VERSION}.tar.gz \
- && tar -xzf singularity-${VERSION}.tar.gz \
- && cd singularity \
- && ./mconfig --prefix=/singularity \
+ && wget --quiet https://github.com/apptainer/apptainer/releases/download/v${VERSION}/apptainer-${VERSION}.tar.gz \
+ && tar -xzf apptainer-${VERSION}.tar.gz \
+ && mv apptainer-${VERSION} apptainer \
+ && cd apptainer \
+ && ./mconfig --prefix=/apptainer \
  && make -C builddir \
  && make -C builddir install
 
 FROM base
 
-# Original Singularity information.
+# Add Apptainer information.
 
-COPY --from=builder /tmp/singularity/LICENSE.md /singularity/LICENSE.md
-COPY --from=builder /tmp/singularity/README.md /singularity/README.md
+COPY --from=builder /tmp/apptainer/LICENSE*.md /apptainer/
+COPY --from=builder /tmp/apptainer/README.md /apptainer/README.md
 
-# This repository's information.
+# Add this Github repository's information.
 
 ADD README.md LICENSE Dockerfile /
 
-# Singularity executable.
+# Apptainer executable.
 
 # Full install...
-#COPY --from=builder /singularity /singularity
+#COPY --from=builder /apptainer /apptainer
 
 # Minimal install... supports singularity pull/build workflows.
-COPY --from=builder /singularity/bin/singularity /singularity/bin/singularity
-COPY --from=builder /singularity/etc/singularity/singularity.conf /singularity/etc/singularity/singularity.conf
+COPY --from=builder /apptainer/bin/apptainer /apptainer/bin/apptainer
+COPY --from=builder /apptainer/bin/singularity /apptainer/bin/singularity
+COPY --from=builder /apptainer/etc/apptainer/apptainer.conf /apptainer/etc/apptainer/apptainer.conf
 
-# Conveniences.
+# Docker image conveniences.
 
-ENV PATH=$PATH:/singularity/bin
+ENV PATH=$PATH:/apptainer/bin
 RUN mkdir /output
 WORKDIR /output
