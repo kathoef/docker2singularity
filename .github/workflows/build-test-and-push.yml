@@ -3,9 +3,14 @@ name: build, test and push multi-arch Docker container images
 on:
   pull_request:
     branches: main
+    paths:
+     - Dockerfile
+     - .github/workflows/build-test-and-push.yml
   push:
     branches: main
-    paths: Dockerfile
+    paths:
+     - Dockerfile
+     - .github/workflows/build-test-and-push.yml
 
 env:
   GITHUB_SHA: ${{ github.sha }}
@@ -55,7 +60,7 @@ jobs:
        with:
         username: ${{ secrets.DOCKERHUB_LOGIN_USER }}
         password: ${{ secrets.DOCKERHUB_LOGIN_TOKEN }}
-     - name: Build and push multi-arch Docker images
+     - name: Build and push the multi-arch Docker images
        if: ${{ startsWith(github.ref, 'refs/heads/main')}}
        uses: docker/build-push-action@v3
        with:
