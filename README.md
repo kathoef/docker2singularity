@@ -55,7 +55,7 @@ Since I use these Docker-based local Singularity container image build workflows
 
 Maybe it happens to be useful to others, feedback is welcome!
 
-[^1]: mainly since Continuous Integration and/or manual DockerHub-based workflows add complexity to a single-user data analysis project that seems "overkill" and also since I have seen `singularity pull` attempts on e.g. HPC machines failing
+[^1]: mainly since CI and/or manual DockerHub-based workflows add complexity to a single-user data analysis project that seems unnecessary and also because I have seen `singularity pull` attempts on e.g. HPC machines failing
 
 ## References
 
